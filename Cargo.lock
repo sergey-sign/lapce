@@ -509,7 +509,7 @@ dependencies = [
  "clicolors-control",
  "lazy_static 1.4.0",
  "libc",
- "parking_lot 0.6.4",
+ "parking_lot 0.11.2",
  "regex",
  "termios",
  "unicode-width",
@@ -1991,6 +1991,7 @@ dependencies = [
  "tinyfiledialogs",
  "toml",
  "tree-sitter",
+ "tree-sitter-go",
  "tree-sitter-highlight",
  "tree-sitter-rust",
  "unicode-segmentation",
@@ -4165,6 +4166,16 @@ checksum = "8085411272e5e472f38ed09b911b29ab61979f21cd5fba3454738b85b438ba20"
 dependencies = [
  "cc",
  "regex",
+]
+
+[[package]]
+name = "tree-sitter-go"
+version = "0.19.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "71967701c8214be4aa77e0260e98361e6fd71ceec1d9d03abb37a22c9f60d0ff"
+dependencies = [
+ "cc",
+ "tree-sitter",
 ]
 
 [[package]]
