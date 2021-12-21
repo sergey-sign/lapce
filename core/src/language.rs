@@ -3,6 +3,7 @@ use std::{collections::HashMap, path::PathBuf};
 use tree_sitter::Parser;
 use tree_sitter_go;
 use tree_sitter_highlight::HighlightConfiguration;
+use tree_sitter_html;
 use tree_sitter_json;
 use tree_sitter_ruby;
 use tree_sitter_rust;
@@ -13,6 +14,7 @@ pub enum LapceLanguage {
     Go,
     Ruby,
     Json,
+    Html,
 }
 
 impl LapceLanguage {
@@ -34,6 +36,7 @@ impl LapceLanguage {
             "go" => LapceLanguage::Go,
             "rb" | "rake" | "ru" => LapceLanguage::Ruby,
             "json" => LapceLanguage::Json,
+            "html" => LapceLanguage::Html,
             _ => return None,
         })
     }
@@ -159,6 +162,43 @@ pub fn new_highlight_config(
 
             (configuration, recognized_names)
         }
+        LapceLanguage::Html => {
+            let mut configuration = HighlightConfiguration::new(
+                tree_sitter_html::language(),
+                tree_sitter_html::HIGHLIGHT_QUERY,
+                "",
+                "",
+            )
+            .unwrap();
+            let recognized_names = vec![
+                "constant",
+                "constant.builtin",
+                "type",
+                "type.builtin",
+                "property",
+                "comment",
+                "constructor",
+                "function",
+                "function.method",
+                "function.macro",
+                "punctuation.bracket",
+                "punctuation.delimiter",
+                "label",
+                "keyword",
+                "string",
+                "variable.parameter",
+                "variable.builtin",
+                "operator",
+                "attribute",
+                "escape",
+            ]
+            .iter()
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>();
+            configuration.configure(&recognized_names);
+
+            (configuration, recognized_names)
+        }
         LapceLanguage::Json => {
             let mut configuration = HighlightConfiguration::new(
                 tree_sitter_json::language(),
@@ -190,6 +230,7 @@ pub fn new_parser(language: LapceLanguage) -> Parser {
         LapceLanguage::Go => tree_sitter_go::language(),
         LapceLanguage::Ruby => tree_sitter_ruby::language(),
         LapceLanguage::Json => tree_sitter_json::language(),
+        LapceLanguage::Html => tree_sitter_html::language(),
     };
     let mut parser = Parser::new();
     parser.set_language(language).unwrap();
